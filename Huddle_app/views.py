@@ -84,7 +84,7 @@ def huddle_group(request, huddle_group_id):
         return redirect('Huddle_app:huddle_login')
     
 @transaction.atomic
-def create_task(request):
+def create_task(request, huddle_group_id):
     if request.method == 'POST':
         # Assuming you have the necessary form fields in the request
         task_name = request.POST.get('taskName')
@@ -105,7 +105,7 @@ def create_task(request):
             account = Account.objects.get(id=user_id, username=username)
 
             # Assuming you have the huddle group ID in the request or session
-            huddle_group_id = request.session.get('huddle_group_id')
+            huddle_group_id = request.POST.get('huddle_group_id')
 
             try:
                 # Get the huddle group
