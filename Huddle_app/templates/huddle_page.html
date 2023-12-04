@@ -84,7 +84,31 @@
                         <button class="button is-info is-rounded add-task-button is-outlined js-modal-trigger mt-0" data-target="modal-create-task" id="addTaskButton"style="margin-bottom: 20px;">+</button>
                         <div class="tasks" id="tasksContainer">
                             <!-- Existing task cards will be appended here -->
-
+                            {% for task in tasks %}
+                                <div class="card">
+                                    <header class="card-header">
+                                        <p class="card-header-title">
+                                            {{ task.name }}
+                                        </p>
+                                        <button class="card-header-icon" aria-label="more options">
+                                            <span class="icon">
+                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </header>
+                                    <div class="card-content">
+                                        <div class="content">
+                                            Description: {{ task.description }}
+                                            <br>
+                                            Assigned Members: {{ task.people_assigned }}
+                                        </div>
+                                    </div>
+                                    <footer class="card-footer">
+                                        <p class="card-footer-item">Due Date: {{ task.deadline }}</p>
+                                        <a href="#" class="card-footer-item" onclick="deleteTask(this)">Delete</a>
+                                    </footer>
+                                </div>
+                            {% endfor %}
                         </div>
                           <!-- Example Task Card (you can repeat this structure for each task) -->
                           <div class="card">

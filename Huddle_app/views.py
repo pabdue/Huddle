@@ -73,20 +73,12 @@ def huddle_group(request, huddle_group_id):
         # Get the user's huddle groups
         huddle_group = get_object_or_404(HuddleGroup, id=huddle_group_id)
 
-        # Check if the user is a member of the huddle group
-        if request.user not in huddle_group.members.all():
-            messages.error(request, "You are not a member of this huddle group.")
-            return redirect('Huddle_app:huddle_home')
-
-        # Fetch tasks related to the huddle group
-        tasks = Task.objects.filter(huddle_group=huddle_group)
-
-        return render(request, 'huddle_page.html', {'huddle_group': huddle_group, 'tasks': tasks})
-    except HuddleGroup.DoesNotExist:
-        # If the huddle group does not exist, display an error message
-        messages.error(request, "Huddle group not found.")
-        return redirect('Huddle_app:huddle_home')
-
+        return render(request, 'huddle_page.html', {'huddle_group': huddle_group})
+    except Account.DoesNotExist:
+        # If the user does not exist, display an error message
+        messages.error(request, "User not found.")
+        return redirect('Huddle_app:huddle_login')
+    
 def create_task(request):
     if request.method == 'POST':
         # Assuming you have the necessary form fields in the request
