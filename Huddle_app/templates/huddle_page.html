@@ -200,7 +200,7 @@
                               <button class="delete" aria-label="close"></button>
                           </header>
                           <!-- url 'create_task' -->
-                          <form id="addTaskForm" method="post" action="{% url 'Huddle_app:create_task' %}">
+                          <form id="addTaskForm" method="post" action="{% url 'Huddle_app:create_task' huddle_group.id %}">
                             {% csrf_token %}
                               <section class="modal-card-body">
                                   <div class="field">
