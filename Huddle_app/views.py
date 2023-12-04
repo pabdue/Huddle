@@ -105,7 +105,7 @@ def create_task(request):
             account = Account.objects.get(id=user_id, username=username)
 
             # Assuming you have the huddle group ID in the request or session
-            huddle_group_id = request.POST.get('huddle_group_id')
+            huddle_group_id = request.session.get('huddle_group_id')
 
             try:
                 # Get the huddle group
