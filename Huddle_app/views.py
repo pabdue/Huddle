@@ -3,6 +3,7 @@ from .models import Account
 from django.contrib import messages
 from .models import Account, HuddleGroup, Task
 from django.http import JsonResponse
+from django.db import transaction
 
 def huddle_home(request):
     # Get user information from the session
@@ -82,6 +83,7 @@ def huddle_group(request, huddle_group_id):
         messages.error(request, "User not found.")
         return redirect('Huddle_app:huddle_login')
     
+@transaction.atomic
 def create_task(request):
     if request.method == 'POST':
         # Assuming you have the necessary form fields in the request
@@ -105,17 +107,25 @@ def create_task(request):
             # Assuming you have the huddle group ID in the request or session
             huddle_group_id = request.POST.get('huddle_group_id')
 
-            # Get the huddle group
-            huddle_group = HuddleGroup.objects.get(id=huddle_group_id)
+            try:
+                # Get the huddle group
+                huddle_group = HuddleGroup.objects.get(id=huddle_group_id)
+            except HuddleGroup.DoesNotExist:
+                # If the huddle group does not exist, display an error message
+                return JsonResponse({'success': False, 'error': 'HuddleGroup not found.'})
 
-            # Create a new task instance and save it to the database
-            task = Task.objects.create(
-                name=task_name,
-                description=task_description,
-                people_assigned=assigned_members,
-                deadline=due_date,
-                huddle_group=huddle_group  # Associate the task with the huddle group
-            )
+            try:
+                # Create a new task instance and save it to the database
+                task = Task.objects.create(
+                    name=task_name,
+                    description=task_description,
+                    people_assigned=assigned_members,
+                    deadline=due_date,
+                    huddle_group=huddle_group  # Associate the task with the huddle group
+                )
+            except Exception as e:
+                # If there's an error during task creation, handle it and return an error response
+                return JsonResponse({'success': False, 'error': str(e)})
 
             return JsonResponse({'success': True})
 
