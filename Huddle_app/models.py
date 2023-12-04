@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from .models import HuddleGroup
 
 # Create your models here.
 class Account(models.Model):
@@ -12,11 +11,10 @@ class Account(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-    
+
 class HuddleGroup(models.Model):
     name = models.CharField(max_length=100)
     members = models.ManyToManyField(Account, related_name='huddle_groups')
-    # Add other fields as needed
 
     def __str__(self):
         return self.name
