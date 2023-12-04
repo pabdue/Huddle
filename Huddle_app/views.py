@@ -104,14 +104,10 @@ def create_task(request, huddle_group_id):
             # Get the user's account
             account = Account.objects.get(id=user_id, username=username)
 
-            # Assuming you have the huddle group ID in the request or session
-            huddle_group_id = request.POST.get('huddle_group_id')
-
+            # Get the huddle group using the ID from the URL parameters
             try:
-                # Get the huddle group
                 huddle_group = HuddleGroup.objects.get(id=huddle_group_id)
             except HuddleGroup.DoesNotExist:
-                # If the huddle group does not exist, display an error message
                 return JsonResponse({'success': False, 'error': 'HuddleGroup not found.'})
 
             try:
@@ -124,13 +120,11 @@ def create_task(request, huddle_group_id):
                     huddle_group=huddle_group  # Associate the task with the huddle group
                 )
             except Exception as e:
-                # If there's an error during task creation, handle it and return an error response
                 return JsonResponse({'success': False, 'error': str(e)})
 
             return JsonResponse({'success': True})
 
         except Account.DoesNotExist:
-            # If the user does not exist, display an error message
             return JsonResponse({'success': False, 'error': 'User not found.'})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
