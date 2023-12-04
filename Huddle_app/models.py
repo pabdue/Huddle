@@ -10,20 +10,21 @@ class Account(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
-class Task(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    people_assigned = models.TextField()  # Assuming a comma-separated list of people assigned
-    deadline = models.DateField()
-
-    def __str__(self):
-        return self.name
     
 class HuddleGroup(models.Model):
     name = models.CharField(max_length=100)
     members = models.ManyToManyField(Account, related_name='huddle_groups')
     # Add other fields as needed
+
+    def __str__(self):
+        return self.name
+    
+class Task(models.Model):
+    huddle_group = models.ForeignKey(HuddleGroup, on_delete=models.CASCADE, related_name='tasks')
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    assigned_members = models.TextField()
+    due_date = models.DateField()
 
     def __str__(self):
         return self.name
