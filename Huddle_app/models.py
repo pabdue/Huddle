@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Account(models.Model):
@@ -11,19 +12,20 @@ class Account(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
-class Task(models.Model):
+class HuddleGroup(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
-    people_assigned = models.TextField()  # Assuming a comma-separated list of people assigned
-    deadline = models.DateField()
+    members = models.ManyToManyField(Account, related_name='huddle_groups')
 
     def __str__(self):
         return self.name
     
-class HuddleGroup(models.Model):
+class Task(models.Model):
+    huddle_group = models.ForeignKey(HuddleGroup, on_delete=models.CASCADE, related_name='tasks', default=16)
     name = models.CharField(max_length=100)
-    members = models.ManyToManyField(Account, related_name='huddle_groups')
-    # Add other fields as needed
+    description = models.TextField(max_length=1000)
+    people_assigned = models.TextField(max_length=100)
+    deadline = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
+
