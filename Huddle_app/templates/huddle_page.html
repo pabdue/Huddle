@@ -140,7 +140,7 @@
                         <p class="tab-titles">Calendar</p>
                         <hr class="hr">
 
-                        <!--<div id='calendar'></div>-->
+                        <div id='calendar'></div>
                     </div>
                     <div id="members-container" style="padding-top: 75px;">
                         <p class="tab-titles">Members</p>
@@ -200,7 +200,7 @@
                               <button class="delete" aria-label="close"></button>
                           </header>
                           <!-- url 'create_task' -->
-                          <form id="addTaskForm" method="post" action="">
+                          <form id="addTaskForm" method="post" action="{% url 'create_task %}">
                             {% csrf_token %}
                               <section class="modal-card-body">
                                   <div class="field">
