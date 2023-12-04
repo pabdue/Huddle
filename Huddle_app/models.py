@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from .models import HuddleGroup
 
 # Create your models here.
 class Account(models.Model):
@@ -21,12 +22,11 @@ class HuddleGroup(models.Model):
         return self.name
     
 class Task(models.Model):
-    huddle_group = models.ForeignKey('HuddleGroup', on_delete=models.CASCADE, related_name='tasks')
+    huddle_group = models.ForeignKey(HuddleGroup, on_delete=models.CASCADE, related_name='tasks')
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=1000)
-    people_assigned = models.TextField(max_length=100)  # Assuming a comma-separated list of people assigned
-    deadline = models.DateTimeField(default=timezone.now)  # Set default to current date and time
-
+    people_assigned = models.TextField(max_length=100)
+    deadline = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
