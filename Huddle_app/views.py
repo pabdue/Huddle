@@ -74,7 +74,7 @@ def huddle_group(request, huddle_group_id):
         user = Account.objects.get(id=user_id, username=username)
         
         # Check if the user is a member of the requested huddle group
-        huddle_group = get_object_or_404(HuddleGroup, id=huddle_group_id, members=user)
+        huddle_group = get_object_or_404(HuddleGroup, id=huddle_group_id)
 
         return render(request, 'huddle_page.html', {'huddle_group': huddle_group})
     except Account.DoesNotExist:
