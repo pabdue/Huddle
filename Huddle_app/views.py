@@ -3,6 +3,7 @@ from .models import Account
 from django.contrib import messages
 from .models import Account, HuddleGroup, Task
 from django.http import JsonResponse
+from django.db import transaction
 
 def huddle_home(request):
     # Get user information from the session
@@ -74,15 +75,24 @@ def huddle_group(request, huddle_group_id):
         user = Account.objects.get(id=user_id, username=username)
         
         # Check if the user is a member of the requested huddle group
-        huddle_group = get_object_or_404(HuddleGroup, id=huddle_group_id, members=user)
+        huddle_group = get_object_or_404(HuddleGroup, id=huddle_group_id)
 
-        return render(request, 'huddle_page.html', {'huddle_group': huddle_group})
+        tasks = tasks = Task.objects.filter(huddle_group=huddle_group)
+
+        context = {
+        'huddle_group': huddle_group,
+        'tasks': tasks,
+        # Include other context variables as needed
+        }
+
+        return render(request, 'huddle_page.html', context)
     except Account.DoesNotExist:
         # If the user does not exist, display an error message
         messages.error(request, "User not found.")
         return redirect('Huddle_app:huddle_login')
     
-def create_task(request):
+@transaction.atomic
+def create_task(request, huddle_group_id):
     if request.method == 'POST':
         # Assuming you have the necessary form fields in the request
         task_name = request.POST.get('taskName')
@@ -102,25 +112,28 @@ def create_task(request):
             # Get the user's account
             account = Account.objects.get(id=user_id, username=username)
 
-            # Assuming you have the huddle group ID in the request or session
-            huddle_group_id = request.POST.get('huddle_group_id')
+            # Get the huddle group using the ID from the URL parameters
+            try:
+                huddle_group = HuddleGroup.objects.get(id=huddle_group_id)
+            except HuddleGroup.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'HuddleGroup not found.'})
 
-            # Get the huddle group
-            huddle_group = HuddleGroup.objects.get(id=huddle_group_id)
+            try:
+                # Create a new task instance and save it to the database
+                task = Task.objects.create(
+                    name=task_name,
+                    description=task_description,
+                    people_assigned=assigned_members,
+                    deadline=due_date,
+                    huddle_group=huddle_group  # Associate the task with the huddle group
+                )
+            except Exception as e:
+                return JsonResponse({'success': False, 'error': str(e)})
 
-            # Create a new task instance and save it to the database
-            task = Task.objects.create(
-                name=task_name,
-                description=task_description,
-                people_assigned=assigned_members,
-                deadline=due_date,
-                huddle_group=huddle_group  # Associate the task with the huddle group
-            )
-
-            return JsonResponse({'success': True})
+            # Redirect to the huddle_group view with the appropriate huddle_group_id
+            return redirect('Huddle_app:huddle_group', huddle_group_id=huddle_group.id)
 
         except Account.DoesNotExist:
-            # If the user does not exist, display an error message
             return JsonResponse({'success': False, 'error': 'User not found.'})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})

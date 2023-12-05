@@ -85,56 +85,33 @@
                         <div class="tasks" id="tasksContainer">
                             <!-- Existing task cards will be appended here -->
                             {% for task in tasks %}
+                              <div class="py-3">
                                 <div class="card">
                                     <header class="card-header">
-                                        <p class="card-header-title">
+                                        <p class="card-header-title title is-4">
                                             {{ task.name }}
                                         </p>
-                                        <button class="card-header-icon" aria-label="more options">
-                                            <span class="icon">
-                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                            </span>
-                                        </button>
                                     </header>
                                     <div class="card-content">
                                         <div class="content">
-                                            Description: {{ task.description }}
-                                            <br>
-                                            Assigned Members: {{ task.people_assigned }}
+                                            <p class="subtitle is-5 mb-1">Description:</p>
+                                            <article class="message is-dark mb-1">
+                                                <div class="message-body">
+                                                    {{ task.description }}
+                                                </div>
+                                            </article>
+                                            <p class="subtitle is-5 mb-1 pt-2">Assigned Members:</p>
+                                            <span class="tag is-medium is-info">{{ task.people_assigned }}</span>
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <p class="card-footer-item">Due Date: {{ task.deadline }}</p>
+                                        <p class="card-footer-item"><strong>Due Date: </strong> {{ task.deadline }}</p>
                                         <a href="#" class="card-footer-item" onclick="deleteTask(this)">Delete</a>
                                     </footer>
                                 </div>
+                              </div>
                             {% endfor %}
                         </div>
-                          <!-- Example Task Card (you can repeat this structure for each task) -->
-                          <div class="card">
-                              <header class="card-header" onclick="toggleTaskCard(this)">
-                                  <p class="card-header-title">
-                                      Task #1: Task Name Goes Here
-                                  </p>
-                                  <button class="card-header-icon" aria-label="more options">
-                                      <span class="icon">
-                                          <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                      </span>
-                                  </button>
-                              </header>
-                              <div class="card-content">
-                                  <div class="content">
-                                      Description: Task description goes here.
-                                      <br>
-                                      Assigned Members: Member 1, Member 2
-                                  </div>
-                              </div>
-                              <footer class="card-footer">
-                                  <p class="card-footer-item">Due Date: 2023-12-31</p>
-                                  <a href="#" class="card-footer-item" onclick="deleteTask(this)">Delete</a>
-                                </footer>
-                          </div>
-                          <!-- End of Example Task Card -->
                     </div>
                     <div id="calendar-container" style="padding-top: 75px;">
                         <p class="tab-titles">Calendar</p>
@@ -200,7 +177,7 @@
                               <button class="delete" aria-label="close"></button>
                           </header>
                           <!-- url 'create_task' -->
-                          <form id="addTaskForm" method="post" action="{% url 'Huddle_app:create_task' %}">
+                          <form id="addTaskForm" method="post" action="{% url 'Huddle_app:create_task' huddle_group.id %}">
                             {% csrf_token %}
                               <section class="modal-card-body">
                                   <div class="field">
