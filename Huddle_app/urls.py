@@ -11,4 +11,5 @@ urlpatterns = [
     path('huddle/signup/', views.huddle_signup, name='huddle_signup'),
     path('create_huddle/', views.create_huddle, name='create_huddle'),
     path('create_task/<int:huddle_group_id>/', views.create_task, name='create_task'),
+    path('add_member/<int:huddle_group_id>/', views.add_member, name='add_member'),
 ]

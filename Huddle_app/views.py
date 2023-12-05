@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Account
 from django.contrib import messages
-from .models import Account, HuddleGroup, Task
+from .models import Account, HuddleGroup, Task, HuddleGroupMembers
 from django.http import JsonResponse
 from django.db import transaction
 
@@ -77,12 +77,18 @@ def huddle_group(request, huddle_group_id):
         # Check if the user is a member of the requested huddle group
         huddle_group = get_object_or_404(HuddleGroup, id=huddle_group_id)
 
-        tasks = tasks = Task.objects.filter(huddle_group=huddle_group)
+        # Get all members associated with the huddle group
+        members = HuddleGroupMembers.objects.filter(huddlegroup=huddle_group).select_related('account')
+        other_members = huddle_group.members.all()
+
+        tasks = Task.objects.filter(huddle_group=huddle_group)
 
         context = {
-        'huddle_group': huddle_group,
-        'tasks': tasks,
-        # Include other context variables as needed
+            'huddle_group': huddle_group,
+            'members': members,
+            'other_members': other_members,
+            'tasks': tasks,
+            # Include other context variables as needed
         }
 
         return render(request, 'huddle_page.html', context)
@@ -201,3 +207,40 @@ def huddle_signup(request):
         return redirect('Huddle_app:huddle_login')
 
     return render(request, 'signup.html')
+
+@transaction.atomic
+def add_member(request, huddle_group_id):
+    if request.method == 'POST':
+        # Assuming you have the necessary form fields in the request
+        member_email = request.POST.get('memberEmail')
+
+        # Get user information from the session
+        user_id = request.session.get('user_id')
+        username = request.session.get('username')
+
+        if not user_id or not username:
+            # If user information is not in the session, redirect to login
+            return JsonResponse({'success': False, 'error': 'User not authenticated.'})
+
+        try:
+            # Get the huddle group using the ID from the URL parameters
+            huddle_group = HuddleGroup.objects.get(id=huddle_group_id)
+
+            # Get the account based on the provided email
+            account = Account.objects.get(email=member_email)
+
+            # Check if the user is already a member of the huddle group
+            if HuddleGroupMembers.objects.filter(huddlegroup=huddle_group, account=account).exists():
+                return JsonResponse({'success': False, 'error': 'User is already a member.'})
+
+            # Create a new entry in the HuddleGroupMembers table
+            HuddleGroupMembers.objects.create(huddlegroup=huddle_group, account=account)
+
+            return redirect('Huddle_app:huddle_group', huddle_group_id=huddle_group.id)
+
+        except Account.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'User not found.'})
+        except HuddleGroup.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'HuddleGroup not found.'})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
