@@ -79,7 +79,7 @@ def huddle_group(request, huddle_group_id):
 
         # Get all members associated with the huddle group
         members = HuddleGroupMembers.objects.filter(huddlegroup=huddle_group).select_related('account')
-        other_members = huddle_group.members.all()
+        other_members = huddle_group.members.all().select_related('account')
 
         tasks = Task.objects.filter(huddle_group=huddle_group)
 
