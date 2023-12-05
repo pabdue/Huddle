@@ -85,7 +85,8 @@
                         <div class="tasks" id="tasksContainer">
                             <!-- Existing task cards will be appended here -->
                             {% for task in tasks %}
-                                <div class="card py-3">
+                              <div class="py-3">
+                                <div class="card">
                                     <header class="card-header">
                                         <p class="card-header-title">
                                             {{ task.name }}
@@ -93,16 +94,23 @@
                                     </header>
                                     <div class="card-content">
                                         <div class="content">
-                                            Description: {{ task.description }}
+                                            <p class="pb-1">Description:</p>
+                                            <article class="message is-dark">
+                                                <div class="message-body">
+                                                    {{ task.description }}
+                                                </div>
+                                            </article>
                                             <br>
-                                            Assigned Members: {{ task.people_assigned }}
+                                            <p class="py-1">Assigned Members:</p>
+                                            <span class="tag is-primary is-danger">{{ task.people_assigned }}</span>
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <p class="card-footer-item">Due Date: {{ task.deadline }}</p>
+                                        <p class="card-footer-item"><strong>Due Date: </strong>{{ task.deadline }}</p>
                                         <a href="#" class="card-footer-item" onclick="deleteTask(this)">Delete</a>
                                     </footer>
                                 </div>
+                              </div>
                             {% endfor %}
                         </div>
                     </div>
