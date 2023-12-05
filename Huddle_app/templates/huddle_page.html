@@ -140,48 +140,22 @@
                                     </div>
                             </div>
                             {% endfor %}
+                            {% for other_member in other_members %}
                             <div class="column is-one-third">
-                                <div class="card rounded-edges">
-                                    <div class="card-content">
-                                        <p class="name">Julia Ybañez</p>
-                                    </div>
-                                    <footer class="card-footer" style="justify-content: center;">
-                                        <div class="py-3 px-3">
-                                            <a class="pl-2"href="mailto:ybanez@cpp.edu"target="_blank">
-                                                <i class="fas fa-2x fa-envelope"></i>
-                                            </a>
+                                    <div class="card rounded-edges">
+                                        <div class="card-content">
+                                            <p class="name">{{ other_member.account.first_name }} {{ other_member.account.last_name }}</p>
                                         </div>
-                                    </footer>
-                                </div>
-                            </div>
-                            <div class="column is-one-third">
-                                <div class="card rounded-edges">
-                                    <div class="card-content">
-                                        <p class="name">Pablo Dueñas</p>
+                                        <footer class="card-footer" style="justify-content: center;">
+                                            <div class="py-3 px-3">
+                                                <a class="pl-2" href="mailto:{{ other_member.account.email }}" target="_blank">
+                                                    <i class="fas fa-2x fa-envelope"></i>
+                                                </a>
+                                            </div>
+                                        </footer>
                                     </div>
-                                    <footer class="card-footer" style="justify-content: center;">
-                                        <div class="py-3 px-3">
-                                            <a class="pl-2"href="mailto:pduenas@cpp.edu"target="_blank">
-                                                <i class="fas fa-2x fa-envelope"></i>
-                                            </a>
-                                        </div>
-                                    </footer>
-                                </div>
                             </div>
-                            <div class="column is-one-third">
-                                <div class="card rounded-edges">
-                                    <div class="card-content">
-                                        <p class="name">Alondra Marin</p>
-                                    </div>
-                                    <footer class="card-footer" style="justify-content: center;">
-                                        <div class="py-3 px-3">
-                                            <a class="pl-2"href="mailto:alondramarin@cpp.edu"target="_blank">
-                                                <i class="fas fa-2x fa-envelope"></i>
-                                            </a>
-                                        </div>
-                                    </footer>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                     <!-- Modal for creating tasks -->
