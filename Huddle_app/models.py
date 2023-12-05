@@ -20,7 +20,7 @@ class HuddleGroup(models.Model):
         return self.name
     
 class Task(models.Model):
-    huddle_group = models.ForeignKey(HuddleGroup, on_delete=models.CASCADE, related_name='tasks', default=16)
+    huddle_group = models.ForeignKey(HuddleGroup, on_delete=models.CASCADE, related_name='tasks')
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=1000)
     people_assigned = models.TextField(max_length=100)

@@ -85,16 +85,11 @@
                         <div class="tasks" id="tasksContainer">
                             <!-- Existing task cards will be appended here -->
                             {% for task in tasks %}
-                                <div class="card">
+                                <div class="card py-3">
                                     <header class="card-header">
                                         <p class="card-header-title">
                                             {{ task.name }}
                                         </p>
-                                        <button class="card-header-icon" aria-label="more options">
-                                            <span class="icon">
-                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                            </span>
-                                        </button>
                                     </header>
                                     <div class="card-content">
                                         <div class="content">
@@ -110,31 +105,6 @@
                                 </div>
                             {% endfor %}
                         </div>
-                          <!-- Example Task Card (you can repeat this structure for each task) -->
-                          <div class="card">
-                              <header class="card-header" onclick="toggleTaskCard(this)">
-                                  <p class="card-header-title">
-                                      Task #1: Task Name Goes Here
-                                  </p>
-                                  <button class="card-header-icon" aria-label="more options">
-                                      <span class="icon">
-                                          <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                      </span>
-                                  </button>
-                              </header>
-                              <div class="card-content">
-                                  <div class="content">
-                                      Description: Task description goes here.
-                                      <br>
-                                      Assigned Members: Member 1, Member 2
-                                  </div>
-                              </div>
-                              <footer class="card-footer">
-                                  <p class="card-footer-item">Due Date: 2023-12-31</p>
-                                  <a href="#" class="card-footer-item" onclick="deleteTask(this)">Delete</a>
-                                </footer>
-                          </div>
-                          <!-- End of Example Task Card -->
                     </div>
                     <div id="calendar-container" style="padding-top: 75px;">
                         <p class="tab-titles">Calendar</p>
