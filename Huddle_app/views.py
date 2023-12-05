@@ -77,12 +77,16 @@ def huddle_group(request, huddle_group_id):
         # Check if the user is a member of the requested huddle group
         huddle_group = get_object_or_404(HuddleGroup, id=huddle_group_id)
 
-        tasks = tasks = Task.objects.filter(huddle_group=huddle_group)
+        # Get all members associated with the huddle group
+        members = HuddleGroupMembers.objects.filter(huddlegroup=huddle_group).select_related('account')
+
+        tasks = Task.objects.filter(huddle_group=huddle_group)
 
         context = {
-        'huddle_group': huddle_group,
-        'tasks': tasks,
-        # Include other context variables as needed
+            'huddle_group': huddle_group,
+            'members': members,
+            'tasks': tasks,
+            # Include other context variables as needed
         }
 
         return render(request, 'huddle_page.html', context)
@@ -230,7 +234,7 @@ def add_member(request, huddle_group_id):
             # Create a new entry in the HuddleGroupMembers table
             HuddleGroupMembers.objects.create(huddlegroup=huddle_group, account=account)
 
-            return JsonResponse({'success': True})
+            return redirect('Huddle_app:huddle_group', huddle_group_id=huddle_group.id)
 
         except Account.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'User not found.'})
