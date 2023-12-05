@@ -221,18 +221,13 @@
                                 <p class="modal-card-title">Add Member</p>
                                 <button class="delete" aria-label="close"></button>
                             </header>
-                            <form id="addMemberForm" onsubmit="addMember(event); return false;">
+                            <form id="addMemberForm" method="post" action="{% url 'Huddle_app:add_member' huddle_group.id %}">
+                                {% csrf_token %}
                                 <section class="modal-card-body">
-                                    <div class="field">
-                                        <label class="label">Name</label>
-                                        <div class="control">
-                                            <input class="input" type="text" placeholder="John Doe" name="memberName" id="memberName">
-                                        </div>
-                                    </div>
                                     <div class="field">
                                         <label class="label">Email</label>
                                         <div class="control">
-                                            <input class="input" type="email" placeholder="john@example.com" name="memberEmail" id="memberEmail">
+                                            <input class="input" type="email" placeholder="john@example.com" name="memberEmail" id="memberEmail" required>
                                         </div>
                                     </div>
                                 </section>

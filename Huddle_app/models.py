@@ -29,3 +29,9 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
+class HuddleGroupMembers(models.Model):
+    huddlegroup = models.ForeignKey(HuddleGroup, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    
+    class Meta:
+        unique_together = ['huddlegroup', 'account']
