@@ -77,7 +77,15 @@ def huddle_group(request, huddle_group_id):
         # Check if the user is a member of the requested huddle group
         huddle_group = get_object_or_404(HuddleGroup, id=huddle_group_id)
 
-        return render(request, 'huddle_page.html', {'huddle_group': huddle_group})
+        tasks = tasks = Task.objects.filter(huddle_group=huddle_group)
+
+        context = {
+        'huddle_group': huddle_group,
+        'tasks': tasks,
+        # Include other context variables as needed
+        }
+
+        return render(request, 'huddle_page.html', context)
     except Account.DoesNotExist:
         # If the user does not exist, display an error message
         messages.error(request, "User not found.")
@@ -122,7 +130,7 @@ def create_task(request, huddle_group_id):
             except Exception as e:
                 return JsonResponse({'success': False, 'error': str(e)})
 
-            return JsonResponse({'success': True})
+            return redirect('Huddle_app:huddle_group')
 
         except Account.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'User not found.'})
