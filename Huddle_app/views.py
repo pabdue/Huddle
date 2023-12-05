@@ -130,7 +130,8 @@ def create_task(request, huddle_group_id):
             except Exception as e:
                 return JsonResponse({'success': False, 'error': str(e)})
 
-            return redirect('Huddle_app:huddle_group')
+            # Redirect to the huddle_group view with the appropriate huddle_group_id
+            return redirect('Huddle_app:huddle_group', huddle_group_id=huddle_group.id)
 
         except Account.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'User not found.'})
