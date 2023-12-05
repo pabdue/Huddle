@@ -94,18 +94,18 @@
                                     </header>
                                     <div class="card-content">
                                         <div class="content">
-                                            <p class="mb-1">Description:</p>
+                                            <p class="mb-1"><u>Description:</u></p>
                                             <article class="message is-dark mb-1">
                                                 <div class="message-body">
                                                     {{ task.description }}
                                                 </div>
                                             </article>
-                                            <p class="mb-1">Assigned Members:</p>
+                                            <p class="mb-1 pt-2"><u>Assigned Members:</u></p>
                                             <span class="tag is-medium is-danger">{{ task.people_assigned }}</span>
                                         </div>
                                     </div>
                                     <footer class="card-footer">
-                                        <p class="card-footer-item"><strong>Due Date: </strong>{{ task.deadline }}</p>
+                                        <p class="card-footer-item"><strong>Due Date: </strong> {{ task.deadline }}</p>
                                         <a href="#" class="card-footer-item" onclick="deleteTask(this)">Delete</a>
                                     </footer>
                                 </div>
