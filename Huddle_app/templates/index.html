@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Huddle | Home</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bulma@0.9.4/dist/js/bulma.min.js"></script>
+        <script src="{% static 'script.js' %}"></script>
+    </head>
+    <body>
+      <div class="home-content has-background-light">
+        <!-- navigation bar on top of window -->
+        <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
+          <div class="navbar-brand">
+            <a class="navbar-item huddle-logo pl-5" href="http://huddlgroup.com/">
+              Huddle
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-end">
+              <div class="navbar-item has-dropdown is-hoverable" id="userDropdownContainer">
+                <a class="navbar-link">
+                  <i class="fas fa-lg fa-user-circle"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                  <div class="navbar-item">
+                    <strong>{{ account.username }}</strong>
+                  </div>
+                  <hr class="navbar-divider">
+                  <a class="navbar-item" href="/huddle/login">
+                      <p class="has-text-danger">Logout</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <!-- all content on page -->
+        <div class="container is-max-desktop">
+          <!-- all huddle groups displayed (3 per row) -->
+          <p class="tab-titles pt-4">Huddle Groups</p>
+          <hr class="hr">
+          <button class="button is-info is-rounded is-outlined js-modal-trigger" data-target="modal-create-huddle">+</button>
+          <div class="columns is-multiline is-vcentered pt-3" id="cardContainer">
+            {% for huddle_group in huddle_groups %}
+              <div class="column is-one-third">
+                <a href="{% url 'Huddle_app:huddle_group' huddle_group.id %}">
+                <div class="card">
+                  <div class="card-image">
+                    <figure class="image">
+                      <!-- You might need to adjust this based on your HuddleGroup model -->
+                      <img src="{% static 'huddle_default.png' %}" alt="default huddle photo">
+                    </figure>
+                  </div>
+                  <div class="card-content card-content-size">
+                    <div class="media">
+                      <div class="media-content">
+                        <p class="title is-4">{{ huddle_group.name }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </a> 
+              </div>
+            {% endfor %}
+          </div>
+        </div>        
+      </div>
+      <!-- modal that allows user to create a new huddle group -->
+      <div id="modal-create-huddle" class="modal">
+        <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Create Huddle</p>
+              <button class="delete" aria-label="close"></button>
+            </header>
+            <form id="createHuddleForm" method="post" action="{% url 'Huddle_app:create_huddle' %}">
+              {% csrf_token %}
+              <section class="modal-card-body">
+                <div class="field">
+                  <label class="label">Name</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="Los Broncos" name="huddleName" id="huddleName" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Members</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="email address, email address, ..." name="members" id="members" required>
+                  </div>
+                </div>
+              </section>
+              <footer class="modal-card-foot">
+                <button class="button is-info" type="submit">Create Huddle</button>
+                <button class="button is-outlined is-info" id="cancelButton" type="button">Cancel</button>
+              </footer>
+            </form>
+          </div>
+          <button class="modal-close is-large" aria-label="close"></button>
+      </div>
+    </body>
+</html>
